@@ -19,7 +19,14 @@ void CountingSort(int *a, int n)
 		if (a[i] < 0 || a[i] >= 100)
 		{
 			printf("\nerror\n");
-			return;
+			getchar();
+			getchar();
+			getchar();
+			getchar();
+			getchar();
+			getchar();
+			getchar();
+			exit(0);
 		}
 		else b[a[i]]++;
 	for (int i = 0, j = 0; i < 100; j += b[i], i++)
@@ -31,13 +38,18 @@ int main()
 {
 	int *a, *b;
 	int n;
+	printf("Write N from 1 to 1000000\n");
 	scanf("%d", &n);
+	printf("Write N integers from 0 to 99\n");
 	if (n <= 0 || n > 1e6)
 		return 0;
 	a = new int[n];
 	b = new int[n];
 	for (int i = 0; i < n; i++)
-		scanf("%d", &a[i], n), b[i] = a[i];
+		scanf("%d", &a[i]), b[i] = a[i];
+	for (int i = 0; i < n; i++)
+		printf("%d ", a[i]);
+	cout << endl;
 
 	BubbleSort(a, n);
 	printf("Bubble sort:\n");
