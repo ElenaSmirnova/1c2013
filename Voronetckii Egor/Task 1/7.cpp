@@ -27,7 +27,14 @@ int main()
 	int n, p;
 	scanf("%d%d", &n, &p);
 
-	printf("%d\n", power(n, p));
+	if (p < 0 && n != 1 && n != -1)
+		printf("power is less than zero\n");
+	else if (p < 0)
+		printf("%d\n", power(n, -p));
+	else if (power(n, p) == 0 && n != 0)
+		printf("answer is very big\n");
+	else
+		printf("%d\n", power(n, p));
 
 	getchar();
 	getchar();
