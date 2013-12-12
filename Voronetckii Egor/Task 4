@@ -1,23 +1,7 @@
 #include <cstdio>
-#include <iostream>
-#include <cmath>
-#include <ctime>
-#include <vector>
-#include <map>
-#include <set>
+#include <iostream>                               
 #include <algorithm>
 using namespace std;
-
-typedef long long ll;
-typedef long double ld;
-const ld eps = 1e-12;
-const int inf = 1e9;
-#define pb push_back
-#define pob pop_back
-#define i1 first
-#define i2 second
-#define mp make_pair
-
 
 class String
 {
@@ -181,7 +165,7 @@ public:
 	{
 		return *this;
 	}
-	int Lenght()                                // lenght of string, O(1)
+	int Length()                                // length of string, O(1)
 	{
 		return symbols ? symbols->size : 0;
 	}
@@ -238,16 +222,12 @@ public:
 
 int main()
 { 
-	while (1)
-	{
-		String a("abf");
-	}
 	String str1("abacaba");
 	String str2 = str1;
 	str1 += str1;
 	printf("%s\n", str1.ToCharPointer());
 	printf("%s\n", str2.ToCharPointer());
-	printf("%d %d %d\n", str1 == str2, str1.Lenght(), str2.Empty());
+	printf("%d %d %d\n", str1 == str2, str1.Length(), str2.Empty());
 	str1 = str1.Substring(2, 4);
 	printf("%s\n", str1.ToCharPointer());
 	return 0;
