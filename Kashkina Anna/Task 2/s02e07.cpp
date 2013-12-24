@@ -5,13 +5,16 @@
 #include <vector>
 using namespace std;
 
-//List
+//List : finding cycles
 
 struct Anode {
 	Anode* next, *prev;
 	int val, check, id;
-	Anode(int id) : id(id) {}
-	Anode(int id, int val) : id(id), val(val) {}
+	void init() {
+		next = prev = this;
+	}
+	Anode(int id) : id(id) {init();}
+	Anode(int id, int val) : id(id), val(val) {init();}
 	void upd() {
 		next->prev = this;
 		prev->next = this;
@@ -37,7 +40,6 @@ struct Alist {
 	}
 	Alist() {
 		sheaf[0] = new Anode(0);
-		end()->prev = end()->next = end();
 	}
 	void delnode(Anode* i) {
 		add(i->prev, i->next);
@@ -49,29 +51,28 @@ struct Alist {
 			delnode(sheaf.begin()->second);
 	}
 	void add(Anode* a, Anode* b) {
+		Anode* rem = a->next;
 		a->next = b;
+		b->prev->next = rem;
+		rem->prev = b->prev;
 		b->prev = a;
 	}
 	int size() {
-		return sheaf.size();
+		return sheaf.size() - 1;
 	}
 	void insprev(int a, int b, int val) {
 		if (sheaf.find(a) == sheaf.end()) {
 			sheaf[a] = new Anode(a, val);
 		} else
 			sheaf[a]->val = val;
-		if (sheaf.find(b) == sheaf.end())
+		if (sheaf.find(b) == sheaf.end()) {
 			sheaf[b] = new Anode(b);
+		}
 		add(sheaf[a], sheaf[b]);
 	}
 	void insnext(int a, int b, int val) {
-		if (sheaf.find(a) == sheaf.end()) {
-			sheaf[a] = new Anode(a, val);
-		} else
-			sheaf[a]->val = val;
-		if (sheaf.find(b) == sheaf.end())
-			sheaf[b] = new Anode(a);
-		add(sheaf[b], sheaf[a]);
+		insprev(a, b, val);
+		Aswap(sheaf[a], sheaf[b]);
 	}
 	int count(int val) {
 		Anode* cur = begin();
