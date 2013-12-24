@@ -18,6 +18,7 @@ const int BUF = 256;
 struct list {
 	int a;
 	list *next;
+	
 	list(int _a) {
 		a = _a;
 		next = NULL;
@@ -34,6 +35,12 @@ int read_int(int &x) {
 		exit(0);
 	} else
 		return 1;		
+}
+
+void erase(list *&l) {
+	if (l->next != NULL)
+		erase(l->next);
+	delete l;
 }
 
 void add(list *&l, int new_value) {
@@ -92,6 +99,8 @@ int main() {
 			cout << "No such element.\n";
 		}
 	}
+
+	erase(head);
 
 	getchar();
 	getchar();
