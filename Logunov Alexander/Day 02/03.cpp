@@ -38,6 +38,12 @@ int read_int(int &x) {
 		return 1;
 }
 
+void erase(list *&l) {
+	if (l->next != NULL)
+		erase(l->next);
+	delete l;
+}
+
 void print(list *l) {
 	if (!l)
 		return;
@@ -86,7 +92,7 @@ int main() {
 	//freopen("a.in", "r", stdin);
 	//freopen("a.out", "w", stdout);
 
-	int n, x;
+	int x;
 	cout << "Print the list of integers, ending with 'x': ";
 
 	list *head = NULL;
@@ -96,6 +102,8 @@ int main() {
 	pair<list*, list*> p = invert(head);
 	print(p.second);
 	cout << '\n';
+
+	erase(head);
 
 	getchar();
 	getchar();
