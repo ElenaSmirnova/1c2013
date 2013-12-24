@@ -34,7 +34,7 @@ int read_int(int &x) {
 		gets(s);
 		gets(s);
 		exit(0);
-	} else		
+	} else	  
 		return 1;
 }
 
@@ -44,6 +44,12 @@ void print(list *l) {
 	
 	printf("%d ", l->a);
 	print(l->next);
+}
+
+void erase(list *&l) {
+	if (l->next != NULL)
+		erase(l->next);
+	delete l;
 }
 
 void add(list *&l, int new_value) {
@@ -60,7 +66,7 @@ void add(list *&l, int new_value) {
 	tail->next = elem;
 }
 
-list *erase(list *l) {
+list *erase_neg(list *l) {
 	list *cur = l;
 	while (cur && cur->a > 0) {
 		cur = cur->next;
@@ -72,6 +78,7 @@ list *erase(list *l) {
 	cur = cur->next;
 	while (cur) {
 		if (cur->a <= 0) {
+			delete nxt->next;
 			nxt->next = cur;
 			nxt = cur;
 		}
@@ -85,7 +92,7 @@ int main() {
 	
 	//freopen("a.in", "r", stdin);
 	//freopen("a.out", "w", stdout);
-
+	
 	int n, x;
 	cout << "Print the list of integers, ending with 'x': ";
 
@@ -93,9 +100,11 @@ int main() {
 	while (read_int(x))
 		add(head, x);
 
-	head = erase(head);
+	head = erase_neg(head);
 	print(head);
 	cout << '\n';
+
+	erase(head);
 
 	getchar();
 	getchar();
