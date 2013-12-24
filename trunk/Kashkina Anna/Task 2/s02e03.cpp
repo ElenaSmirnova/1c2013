@@ -30,7 +30,6 @@ struct Alist {
 		}
 	}
 	void upd(int i) {
-		if (!i) return;
 		begins.erase(i);
 		ends.erase(i);
 		if (ins[i] == 0) begins.insert(i);
@@ -51,6 +50,8 @@ struct Alist {
 	}
 	void insert(int a, int b, int val) {
 		add(a, b);
+		if (sheaf.find(a) != sheaf.end()) delete(sheaf[a]);
+		if (sheaf.find(b) == sheaf.end()) sheaf[b] = new Anode(-1, 0);
 		sheaf[a] = new Anode(val, b);
 	}
 	void chnext(int a, int b) {
