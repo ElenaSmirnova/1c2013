@@ -34,6 +34,11 @@ struct Anode {
 		rem->prev = b->prev;
 		b->prev = a;
 	}
+	friend void isolate(Anode* a) {
+		a->prev->next = a->next;
+		a->next->prev = a->prev;
+		a->next = a->prev = a;
+	}
 	friend void reverse(Anode* a) {
 		if (a->next->next == a) return;
 		Anode* rem1 = a->prev;
@@ -97,6 +102,27 @@ struct Alist {
 		}
 		return res;
 	}
+	Anode* scan() {
+		int a;
+		vector<int> v;
+		for (int i = 1; ; ++i) {
+			cin >> a;
+			if (a == -1) break;
+			v.push_back(a);
+		}
+		int minf = size() + 1;
+		for (int i = 0; i < v.size(); ++i)
+			insprev(i + minf, (i + 1 < v.size() ? i + minf + 1 : minf), v[i]);
+		if (v.size()) {
+			v.clear();
+			return sheaf[minf];
+		}
+		return end();
+	}
+	void print() {
+		for (Anode* cur = begin(); cur != end(); cur = cur->next)
+			printf("%d ", cur->val);
+	}
 public:
  	Anode* operator[] (const int& i) {
 		return sheaf[i];
@@ -108,24 +134,21 @@ public:
 int main() {
     int a, b, c;
 	vector<int> v;
-	Alist L;
-	cout << "Input nodes of the list one-by-one.\nEnd your input with -1\n";
-	for (int i = 1; ; ++i) {
-		cin >> a;
-		if (a == -1) break;
-		v.push_back(a);
+	Alist L1;
+	cout << "Input nodes of the first sorted list one-by-one.\nEnd your input with -1\n";
+	add(L1.end(), L1.scan());
+	cout << "Input nodes of the second sorted list one-by-one.\nEnd your input with -1\n";
+	Anode *i2 = L1.scan();
+	Anode *i1 = L1.begin();
+	while (i2 != L1.end()) {
+		Anode *nextf = (i2 == i2->next ? L1.end() : i2->next);
+		while ((i1 != L1.end()) && (i1->val < i2->val)) i1 = i1->next;
+		isolate(i2);
+		add(i2, i1);
+		i2 = nextf;
 	}
-	for (int i = 0; i < v.size(); ++i)
-		L.insprev(i + 1, (i + 1 < v.size() ? i + 2 : 0), v[i]);
-	if (v.size())
-		L.add(L[0], L[1]);
-    for (Anode* cur = L.begin(); cur != L.end(); ) {
-		Anode* mcur = cur, *nextf = cur->next;
-		while (mcur->val < mcur->prev->val && mcur->prev != L.end()) Aswap(mcur, mcur->prev);
-		cur = nextf;
-	}
-	for (Anode* cur = L.begin(); cur != L.end(); cur = cur->next)
-		printf("%d ", cur->val);
-        	
-	L.clear();
+	L1.print();
+	
+	
+	L1.clear();
 }
