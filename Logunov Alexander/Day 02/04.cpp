@@ -124,6 +124,7 @@ int main() {
 		cout << "Cycle has not found.\n";
 
 	erase(head);
+	elements.clear();
 
     getchar();
     getchar();

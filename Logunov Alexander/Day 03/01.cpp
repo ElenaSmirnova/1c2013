@@ -38,6 +38,15 @@ int read_int(int &x) {
         return 1;
 }
 
+void clear(tree *&t) {
+	if (!t)
+		return;
+	
+	clear(t->left);
+	clear(t->right);
+	delete t;
+}
+
 void print(tree *t) {
     if (!t)
         return;
@@ -60,6 +69,8 @@ int main() {
 	root->right->left = new tree(3);
 	
     print(root);
+
+	clear(root);
 
     getchar();
 
