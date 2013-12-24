@@ -47,6 +47,12 @@ void print(list *l) {
 	print(l->next);
 }
 
+void erase(list *&l) {
+	if (l->next != NULL)
+		erase(l->next);
+	delete l;
+}
+
 void add(list *&l, int new_value) {
 	if (!l) {
 		l = new list(new_value);
@@ -97,6 +103,9 @@ int main() {
 	map<int, int> library = scan(head);
 	for (auto it = library.begin(); it != library.end(); it++)
 		printf("%d: %d times\n", it->first, it->second);
+
+	erase(head);
+	library.clear();
 
 	getchar();
 	getchar();

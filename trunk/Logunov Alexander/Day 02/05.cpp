@@ -38,6 +38,12 @@ int read_int(int &x) {
 		return 1;
 }
 
+void erase(list *&l) {
+	if (l->next != NULL)
+		erase(l->next);
+	delete l;
+}
+
 void print(list *l) {
 	if (!l)
 		return;
@@ -96,6 +102,8 @@ int main() {
 
 	pair<int, int> answer = min(head, 0);
 	cout << answer.second + 1 << '\n';
+
+	erase(head);
 
 	getchar();
 	getchar();
