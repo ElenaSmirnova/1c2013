@@ -2,69 +2,89 @@
 #include <cstdio>
 #include <map>
 #include <set>
+#include <vector>
 using namespace std;
 
-//List : get element by number
+//List : finding cycles
 
 struct Anode {
-	int next, val;
-	Anode() {}
-	Anode(int next) : next(next) {}
-	Anode(int val, int next) : val(val), next(next) {}
+	Anode* next, *prev;
+	int val, check, id;
+	void init() {
+		next = prev = this;
+	}
+	Anode(int id) : id(id) {init();}
+	Anode(int id, int val) : id(id), val(val) {init();}
+	void upd() {
+		next->prev = this;
+		prev->next = this;
+	}
+	friend void Aswap(Anode* a, Anode* b) {
+		swap(a->prev, b->prev);
+		swap(a->next, b->next);	
+		if (a->next == a) swap(a->next, b->prev);
+		else swap(a->prev, b->next);
+		a->upd();
+		b->upd();
+	}
 };
 
 struct Alist {
 	map<int, Anode*> sheaf;
-	map<int, int> ins, outs;
-	set<int> begins, ends;
-	int begin() {
-		return *begins.begin();
+	void del(int, int);
+	Anode* begin() {
+		return sheaf[0]->next;
 	}
-	int end() {
-		return *ends.begin();
+	Anode* end() {
+		return sheaf[0];
 	}
-	void delnode(int i) {
-		delete(sheaf[i]);
-		sheaf.erase(i);
+	Alist() {
+		sheaf[0] = new Anode(0);
+	}
+	void delnode(Anode* i) {
+		add(i->prev, i->next);
+		delete(i);
+		sheaf.erase(i->id);
 	}
 	void clear() {
 		while (sheaf.size())
-			delnode(sheaf.begin()->first);
+			delnode(sheaf.begin()->second);
 	}
-	void upd(int i) {
-		begins.erase(i);
-		ends.erase(i);
-		if (ins[i] == 0) begins.insert(i);
-		if (outs[i] == 0) ends.insert(i);
-	}
-	void add(int a, int b) {
-		if (a && b) {
-			++outs[a]; ++ins[b]; upd(a); upd(b);
-		}
-	}
-	void del(int a, int b) {
-		if (a && b) {
-			--outs[a]; --ins[b]; upd(a); upd(b);
-		}
+	void add(Anode* a, Anode* b) {
+		Anode* rem = a->next;
+		a->next = b;
+		b->prev->next = rem;
+		rem->prev = b->prev;
+		b->prev = a;
 	}
 	int size() {
-		return sheaf.size();
+		return sheaf.size() - 1;
 	}
-	void insert(int a, int b, int val) {
-		add(a, b);
-		if (sheaf.find(a) != sheaf.end()) delete(sheaf[a]);
-		sheaf[a] = new Anode(val, b);
+	void insprev(int a, int b, int val) {
+		if (sheaf.find(a) == sheaf.end()) {
+			sheaf[a] = new Anode(a, val);
+		} else
+			sheaf[a]->val = val;
+		if (sheaf.find(b) == sheaf.end()) {
+			sheaf[b] = new Anode(b);
+		}
+		add(sheaf[a], sheaf[b]);
 	}
-	void killbegin() {
-		int me = begin();
-		del(me, sheaf[me]->next);
-		begins.erase(me); ends.erase(me);
-		delnode(me);
+	void insnext(int a, int b, int val) {
+		insprev(a, b, val);
+		Aswap(sheaf[a], sheaf[b]);
 	}
-	void chnext(int a, int b) {
-		del(a, sheaf[a]->next);
-		sheaf[a]->next = b;
-		add(a, sheaf[a]->next);
+	int count(int val) {
+		Anode* cur = begin();
+		int res = 0;
+		while (cur) {
+			if (cur->val == val) {
+				++res;
+				cur->check = 1;
+			}
+			cur = cur->next;
+		}
+		return res;
 	}
 public:
  	Anode* operator[] (const int& i) {
@@ -76,18 +96,21 @@ public:
 
 int main() {
     int a, b, c;
+	vector<int> v;
 	Alist L;
-	cout << "Input nodes of the list by 2 numbers: number of the node and number of the next node (0, if no such)\nEnd your input with -1\n";
-	while (1) {
+	cout << "Input nodes of the list by two numbers: node and the next node (0, if no such).\nEnd your input with single -1\n";
+	for (int i = 1; ; ++i) {
 		cin >> a;
 		if (a == -1) break;
 		cin >> b;
-		L.insert(a, b, 0);
+		L.insprev(a, b, 0);
 	}
-	int cur = L.begin(), past = 0;
-	while (L.begins.size())
-		L.killbegin();
-	if (L.size()) cout << "Has cycles\n";
-	else cout << "No cycles\n";
+	int hm = 0;
+	
+	for (Anode* cur = L.begin(); cur != L.end(); cur = cur->next)
+		++hm;
+	if (hm < L.size()) cout << "Cyclic\n";
+	else cout << "Acyclic\n";
+
 	L.clear();
 }
