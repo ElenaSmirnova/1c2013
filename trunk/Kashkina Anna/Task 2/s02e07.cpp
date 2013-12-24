@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-//List : finding cycles
+//List : insertion sort
 
 struct Anode {
 	Anode* next, *prev;
