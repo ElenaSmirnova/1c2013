@@ -46,6 +46,12 @@ void print(list *l) {
     print(l->next);
 }
 
+void erase(list *&l) {
+	if (l->next != NULL)
+		erase(l->next);
+	delete l;
+}
+
 void add(list *&l, int new_value) {
     if (!l) {
         l = new list(new_value);
@@ -94,6 +100,8 @@ int main() {
 
     print(head);
     cout << '\n';
+
+	erase(head);
 
     getchar();
     getchar();
