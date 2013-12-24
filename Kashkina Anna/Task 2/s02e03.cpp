@@ -88,6 +88,7 @@ int main() {
 	while (1) {
 		printf("%d(at %d) ", L[cur]->val, cur);
 		if (cur == L.end()) break;
+		printf("=> ");
 		cur = L[cur]->next;
 	}
 	L.clear();
