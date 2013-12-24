@@ -106,7 +106,8 @@ int main() {
 	}
 	for (int i = 0; i < v.size(); ++i)
 		L.insprev(i + 1, (i + 1 < v.size() ? i + 2 : 0), v[i]);
-	L.add(L[0], L[1]);
+	if (v.size())
+		L.add(L[0], L[1]);
     for (Anode* cur = L.begin(); cur != L.end(); ) {
 		Anode* mcur = cur, *nextf = cur->next;
 		while (mcur->val < mcur->prev->val && mcur->prev != L.end()) Aswap(mcur, mcur->prev);
