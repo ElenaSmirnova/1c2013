@@ -18,12 +18,13 @@ void ok() {
 int main() {
     string s;
     cin >> s;
+    stack.push_back('*');
     for (int i = 0; i < s.size(); ++i)
         if (string("[({<").find(s[i]) != string::npos)
             stack.push_back(s[i]);
-        else if (abs(s[i] - stack.back()) < 3)
+       	else if (abs(s[i] - stack.back()) < 3)
             stack.pop_back();
         else fail();
-    if (stack.size()) fail();
+    if (stack.size() > 1) fail();
     ok();
 }
