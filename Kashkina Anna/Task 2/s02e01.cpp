@@ -1,65 +1,52 @@
 #include <iostream>
+#include <cstdio>
+#include <map>
 using namespace std;
 
 //List : get element by number
 
-template<class T>
 struct Anode {
-	T val;
-	Anode<T> *next, *prev;
-	Anode<T>() {}
-	Anode<T>(T val) : val(val) {}
-	Anode* addprev(Anode* a) {
-		a->prev = prev;
-		a->next = this;
-		prev->next = a;
-		prev = a;
-		return a;
+	int next, val;
+	Anode() {}
+	Anode(int next) : next(next) {}
+	Anode(int val, int next) : val(val), next(next) {}
+};
+
+struct Alist {
+	map<int, Anode*> sheaf;
+	void clear() {
+		while (sheaf.size()) {
+			delete(sheaf.begin()->second);
+			sheaf.erase(sheaf.begin());
+		}
 	}
-	Anode* addnext(Anode* a) {
-		a->prev = this;
-		a->next = next;
-		next->prev = a;
-		next = a;
-		return a;
+	void insert(int a, int b, int val) {
+		sheaf[a] = new Anode(val, b);
 	}
-	Anode* del(Anode* a) {
-		prev->next = next;
-		next->prev = prev;
-		return prev;
+public:
+ 	Anode* operator[] (const int& i) {
+		return sheaf[i];
 	}
 };
 
-template<class T>
-struct Alist {
-	Anode<T> *head, *tail;
-	Alist() {
-		head = new Anode<T>();
-		tail = new Anode<T>();
-		head->next = tail;
-		head->prev = head;
-		tail->next = tail;
-		tail->prev = head;
-	}
-};
+
 
 int main() {
-    int numb;
-	//Input list elements ending with the -1
-	Alist<int> L;
-	Anode<int>* link = L.head;
-	while (1) {
-		cin >> numb;
-		if (numb == -1) break;
-		link = link->addnext(new Anode<int>(numb));
+    int a, b, c;
+	Alist L;
+	cout << "Input nodes of the list (their values one-by-one). End your input with -1\n";
+	for (int i = 1; ; ++i) {
+		cin >> a;
+		if (a == -1) break;
+		L.insert(i, i + 1, a);
 	}
-	//Input numbers of elements ending with the -1 (first number is 1)
+	cout << "Input indexes of the nodes to get the information about them. End your input with -1\n";
 	while (1) {
-		cin >> numb;
-		if (numb == -1) break;
-		link = L.head;
-		while (numb > 0 && link->next != link) link = link->next, --numb;
-		if (link->next == link) cout << "Invalid index\n";
-		else cout << link->val << "\n";
+		cin >> a;
+		if (a == -1) break;
+		Anode* m = L[a];
+		if (m) printf("Value: %d\n", m->val);
+		else printf("Invalid number of the node\n");
 	}
+	L.clear();
 }
