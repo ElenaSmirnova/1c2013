@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-//List : reversing list
+//List : insertion sort
 
 struct Anode {
 	Anode* next, *prev;
