@@ -47,6 +47,12 @@ void print(list *l) {
 	print(l->next);
 }
 
+void erase(list *&l) {
+	if (l->next != NULL)
+		erase(l->next);
+	delete l;
+}
+
 void add(list *&l, int new_value) {
 	if (!l) {
 		l = new list(new_value);
@@ -109,6 +115,8 @@ int main() {
 	list *answer = merge(head1, head2);
 	cout << "Sorted list:\n";
 	print(answer);
+
+	erase(answer);
 
 	getchar();
 	getchar();
