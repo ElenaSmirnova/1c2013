@@ -17,10 +17,15 @@ const int BUF = 256;
 
 struct tree {
 	int value;
-	tree *left, *right;
+	tree *left, *right, *parent;
 	tree(int _value) {
 		value = _value;
+		left = right = parent = NULL;
+	}
+	tree(int _value, tree *_parent) {
+		value = _value;
 		left = right = NULL;
+		parent = _parent;
 	}
 };
 
@@ -47,15 +52,6 @@ void clear(tree *&t) {
 	delete t;
 }
 
-void debug(tree *t) {
-	if (!t)
-		return;
-	
-	debug(t->left);
-	printf("[%d]->{%d, %d}\n", t->value, (t->left ? t->left->value : -1), (t->right ? t->right->value : -1));
-	debug(t->right);
-}
-
 void print(tree *t) {
 	if (!t)
 		return;
@@ -65,30 +61,37 @@ void print(tree *t) {
 	print(t->right);
 }
 
-tree *insert(tree *&t, int key) {
+tree *insert(tree *&t, tree *par, int key) {
 	if (t == NULL) {
-		t = new tree(key);
+		t = new tree(key, par);
 	} else {
 		if (t->value > key) {
-			t->left = insert(t->left, key);
+			t->left = insert(t->left, t, key);
 		} else {
-			t->right = insert(t->right, key);
+			t->right = insert(t->right, t, key);
 		}
 	}
 
 	return t;
 }
 
-void insert_subtree(tree *&t, tree *st) {
-	if (t == NULL) {
-		t = st;
-	} else {
-		if (t->value > st->value) {
-			insert_subtree(t->left, st);
-		} else {
-			insert_subtree(t->right, st);
-		}
-	}
+tree *root(tree *t) {
+	if (!t->parent)
+		return t;
+	return root(t->parent);
+}
+
+void root_debug(tree *t) {
+	if (!t)
+		return;
+	
+	root_debug(t->left);
+
+	printf("[%d]->{%d, %d}\n", t->value, (t->left ? t->left->value : -1), (t->right ? t->right->value : -1));
+	tree *rt = root(t);
+	printf("Root: %d\n", rt->value);
+
+	root_debug(t->right);
 }
 
 int main() {
@@ -96,21 +99,14 @@ int main() {
 	//freopen("a.in", "r", stdin);
 	//freopen("a.out", "w", stdout);
 	
-	tree *root = NULL, *subrt = NULL;
+	tree *root = NULL;
 	int x;
 
 	cout << "Print all elements of tree. Finish the list by 'x': ";
 	while (read_int(x))
-		root = insert(root, x);
+		root = insert(root, NULL, x);
 
-	cout << "Now print all elements of sub-tree. Finish the list by 'x': ";
-	while (read_int(x))
-		subrt = insert(subrt, x);
-
-	insert_subtree(root, subrt);
-	//debug(root);
-
-	print(root);
+	root_debug(root);
 
 	clear(root);
 
