@@ -29,14 +29,15 @@ struct Anode {
 struct Alist {
 	map<int, Anode*> sheaf;
 	void del(int, int);
-	Alist() {
-		sheaf[0] = new Anode(0);
-	}
 	Anode* begin() {
 		return sheaf[0]->next;
 	}
 	Anode* end() {
 		return sheaf[0];
+	}
+	Alist() {
+		sheaf[0] = new Anode(0);
+		end()->prev = end()->next = end();
 	}
 	void delnode(Anode* i) {
 		add(i->prev, i->next);
