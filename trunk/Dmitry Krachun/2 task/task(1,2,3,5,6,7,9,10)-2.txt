@@ -1,0 +1,234 @@
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+struct element;
+typedef element *pelement;
+
+struct element
+{
+ static pelement Null;
+ pelement prev, next;
+ int value;
+
+ element() : prev(this), next(this) {}
+ element(int value) : prev(Null), next(Null), value(value) {}
+};
+
+pelement element::Null = new element();
+pelement top = element::Null;
+pelement begin = element::Null;
+
+inline void push_back(int x)
+{
+ pelement elem = new element(x);
+ elem->prev = top;
+ if (top != element::Null)
+   top->next = elem;
+ else
+   begin = elem;
+ top = elem;
+ top->next = element::Null;
+}
+
+inline void delete_el(pelement x)
+{
+ if (x->prev != element::Null)
+   x->prev->next = x->next;
+ else
+     begin = x->next;
+ if (x->next != element::Null)
+   x->next->prev = x->prev;
+ if (x == top)
+   top = top->prev;
+}
+
+int integer(string S)
+{
+   int n = S.length();
+   int x = 0, k = 0;
+   int flag = 1;
+   if(S[k] == '-'){
+       flag = -1;
+       k++;
+   }
+   for(int i = k; i < S.length(); i++){
+       x = 10 * x + S[i] - '0';
+   }
+   x *= flag;
+   return x;
+}
+
+bool Less(pelement p, pelement q){
+ return ((p->value) < (q->value));
+};
+int main()
+{
+ cout << "If you want to add number x in the list, please write 'add x'" << endl;
+ cout << "If you want to delete number x from the list, please write 'delete x'" << endl;
+ cout << "If you want to read the list, please write 'write list'" << endl;
+ cout << "if you want to know, how many number in the list, please write 'length'" << endl;
+ cout << "if you want to revers the list, please write 'revers'" << endl;
+ cout << "if you want to delete all positive elements from the list, write '+delete'" << endl;
+ cout << "If you want to know the position of min element, please write 'min'" << endl;
+ cout << "if you want to see the list as a multiset, please write 'write multiset'" << endl;
+ cout << "if you want to sort the list, please write 'sort'" << endl;
+ cout << "if you want to know the elemnet number N form the list, write 'element N'" << endl;
+ cout << "if you want to insert y after x, please write 'insert y x'" << endl;
+
+ cout << "if you don't have any questions, please write 'exit'" << endl;
+
+
+ char SS[20];
+ while(true){
+   gets(SS);
+   string S = SS;
+   if(S.substr(0, 3) == "add"){
+       int x = integer(S.substr(4, S.length() - 4));
+       push_back(x);
+   }
+   if(S.substr(0, 6) == "delete"){
+       int x = integer(S.substr(7, S.length() - 7));
+       pelement p = begin;
+       while((p->value != x) && (p != element::Null)){
+           p = p->next;
+       }
+       if(p == element::Null){
+           cout << "There is no such element in this list";
+       } else {delete_el(p);};
+   }
+
+   if(S.substr(0, 6) == "insert"){
+       int i = 7;
+       while(S[i] != ' ') i++;
+       int y = integer(S.substr(7, i - 7));
+       int x = integer(S.substr(i + 1, S.length() - i - 1));
+       pelement p = begin;
+       while(p != element::Null){
+           if(p->value == x){
+               pelement q = new element(y);
+              q->next = p->next;
+              p->next->prev = q;
+              p->next = q;
+              q->prev = p;
+           }
+           p = p->next;
+       }
+   }
+
+   if(S.substr(0, 6) == "number"){
+       int x = integer(S.substr(7, S.length() - 7));
+       pelement p = begin;
+       for(int i = 1; i < x; i++) p = p->next;
+       cout << p->value << endl;
+   }
+
+
+   if(S.substr(0, 10) == "write list"){
+       pelement p = begin;
+       while(p != element::Null){
+           cout << p->value << " ";
+           p = p->next;
+       }
+   }
+   if(S.substr(0, 6) == "revers"){
+       pelement p = begin;
+       while(p != element::Null){
+           pelement tmp = p->next;
+           p->next = p->prev;
+           p->prev = tmp;
+           p = p->prev;
+       }
+       pelement tmp = top;
+       top = begin;
+       begin = tmp;
+   }
+   if(S.substr(0, 6) == "length"){
+       pelement p = begin;
+       int n = 0;
+       while(p != element::Null){
+           p = p->next;
+           n++;
+       }
+       cout << n << endl;
+   }
+   if(S.substr(0, 3) == "min"){
+       pelement p = begin;
+       int m = 1e9;
+       while(p != element::Null){
+           if(m > p->value){m = p->value;};
+           p = p->next;
+       };
+       p = begin;
+       int ans = 1;
+       bool flag = 0;
+       while((p != element::Null) && (p->value != m)){
+           p = p->next;
+           ans++;
+       }
+       cout << ans << endl;
+   }
+
+   if(S.substr(0, 7) == "+delete"){
+       pelement p = begin;
+       while(p != element::Null){
+           if(p->value > 0){
+               pelement q = p;
+               p = p->next;
+               delete_el(q);
+           } else {p = p->next;};
+       }
+   }
+
+   if(S.substr(0, 14) == "write multiset"){
+       pelement p = begin;
+       pelement arr[100];
+       int i = 0;
+       while(p != element::Null){
+            arr[i] = p;
+            i++;
+            p = p->next;
+       };
+       sort(arr, arr + i, Less);
+       int c = 0;
+       int j = 0;
+       while(j < i){
+           if ((j == 0) || ((arr[j]->value) != (arr[(j-1)]->value))){
+               if(j > 0){cout << c << " times" << endl;};
+               c = 0;
+               cout << arr[j]->value << ": ";
+           }
+           j++;
+           c++;
+       }
+       cout << c << " times"<< endl;
+   }
+   if(S.substr(0, 4) == "sort"){
+       pelement p = begin;
+       while(p != element::Null){
+           pelement q = begin;
+           pelement t = p->next;
+           while((q->value < p->value) && (q != p)) q = q->next;
+           if((q != p) && (q != begin)){
+               delete_el(p);
+               if(q->prev != element::Null) q->prev->next = p;
+               p->prev = q->prev;
+               q->prev = p;
+               p->next = q;
+           }
+           if(q == begin){
+               delete_el(p);
+               begin->prev = p;
+               p->next = begin;
+               begin = p;
+               p->prev = element::Null;
+           }
+           p = t;
+       }
+   }
+   if(S.substr(0, 4) == "exit"){
+       return 0;
+   }
+ }
+}
