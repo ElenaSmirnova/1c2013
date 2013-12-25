@@ -271,7 +271,6 @@ bool add(List *l, String &str) // add element to hash table if it was in table
 
 int main()
 { 
-	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
 	numOfEmptyCells = maxHash;
 	while (gets(str))
