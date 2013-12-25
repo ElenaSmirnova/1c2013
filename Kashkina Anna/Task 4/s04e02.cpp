@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 using namespace std;
 
@@ -38,9 +39,9 @@ struct Astr {
 		return Astr(a.s + b.s);
 	}
 	int hash() {
-		unsigned int h = 0;
+		int h = 0;
 		for (int i = 0; i < s.size(); ++i)
-			h = (h * base + s[i]) % mod;
+			h = (h * base + s[i] + mod) % mod;
 		return h;
 	} 
 public:
@@ -66,7 +67,7 @@ struct Hnode {
 struct Htable {
 	Hnode* head[mod];
 	int em, sum, maxf;
-	Htable() : em(mod), sum(0), maxf(0) {}
+	Htable() : em(mod), sum(0), maxf(0) {memset(head, 0, sizeof head);}
 	bool check(Astr s) {
 		Hnode* begin = head[s.hash()];
 		while (begin && s != begin->me) begin = begin->next;
@@ -95,8 +96,10 @@ int main() {
     int n, F, E;
 	Htable H;
 	string s;
+	int hm = 0;
 	while (!cin.eof()) {
 		cin >> s;
+		++hm;
 		H.ins(Astr(s));
 	}
 	cout << "Load factor: " << H.LF() << "\nEmpty entries: " << H.empty() << "\nNumber of entries: " << H.sum << endl << "Number of chains: " << mod - H.empty() << endl;
