@@ -93,17 +93,10 @@ struct Htable {
 int main() {
     int n, F, E;
 	Htable H;
-	cout << "Write your requests:\n1) \"a <string>\" to add string to hash table\n2) \"c <string>\" to check whether the string is in the hashtable or not\n3) q to quit\n";
-	while (1) {
-		string c, s;
-		cin >> c;
-		if (c == "a") {
-			cin >> s;
-			H.ins(Astr(s));
-			cout << "Added.\n";
-		} else if (c == "c") {
-			cin >> s;
-			cout << (H.check(Astr(s)) ? "Exists" : "Not exists") << endl;
-		} else break;
+	string s;
+	while (!cin.eof()) {
+		cin >> s;
+		H.ins(Astr(s));
 	}
+	cout << "Load factor: " << H.LF() << "\nEmpty entries: " << H.empty() << "\nNumber of entries: " << H.sum << endl;
 }
