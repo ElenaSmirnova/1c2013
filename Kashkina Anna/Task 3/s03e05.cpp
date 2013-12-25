@@ -2,7 +2,7 @@
 #include <cstdio>
 using namespace std;
 
-//Binary tree : on-line finding parents
+//Binary tree : on-line finding the least common ancestor
 
 const int maxn = 200000;
 struct Btree {
@@ -47,6 +47,30 @@ struct Btree {
 		}
 		printf(")");
 	}
+	
+	int LCA(int n1, int n2) {
+		int v1 = n1, v2 = n2;
+		while (v1) ++sum[v1], v1 = p[v1];
+		while (v2) ++sum[v2], v2 = p[v2];
+
+		v1 = 1;
+		while (1) {
+			if (sum[l[v1]] == sum[v1]) {
+				v1 = l[v1];
+				continue;
+			}
+			if (sum[r[v1]] == sum[v1]) {
+				v1 = r[v1];
+				continue;
+			}
+			break;
+		}
+		int res = v1;
+		v1 = n1; v2 = n2;
+		while (v1) --sum[v1], v1 = p[v1];
+		while (v2) --sum[v2], v2 = p[v2];
+		return res;
+	}
 };
 
 int main() {
@@ -55,13 +79,14 @@ int main() {
 
 	T.link(1, 0);
 	T.val[1] = 1;
-	cout << "Input requests: two numbers A and B. If A = 0, this prints B\'s parent.\nIf A > 0: If A already exists, this will move it to B, otherwise A will be created.\nEnd your input with single -1\nRoot node is 1. After each insertion you will see the tree.\n";
+	cout << "Input requests:\n1) write 0 A B to see the least common ancestor of them\n2) write A B to create vertex A and hang it to B or to move A\'s subtree to B\n3) write -1 to quit\nRoot node is 1. After each insertion you will see the tree.\n";
 	for (;;) {
 		cin >> me;
 		if (me == -1) break;
 		cin >> p;
 		if (me == 0) {
-			printf("%d\n", T.p[p]);
+			cin >> me;
+			printf("%d\n", T.LCA(me, p));
 			continue;
 		}
 		T.link(me, p);
