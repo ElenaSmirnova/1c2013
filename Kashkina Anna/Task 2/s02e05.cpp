@@ -2,69 +2,123 @@
 #include <cstdio>
 #include <map>
 #include <set>
+#include <vector>
 using namespace std;
 
-//List : get element by number
+//List : finding minimum
 
 struct Anode {
-	int next, val;
-	Anode() {}
-	Anode(int next) : next(next) {}
-	Anode(int val, int next) : val(val), next(next) {}
+	Anode* next, *prev;
+	int val, check, id;
+	void init() {
+		next = prev = this;
+	}
+	Anode(int id) : id(id) {init();}
+	Anode(int id, int val) : id(id), val(val) {init();}
+	void upd() {
+		next->prev = this;
+		prev->next = this;
+	}
+	friend void Aswap(Anode* a, Anode* b) {
+		swap(a->prev, b->prev);
+		swap(a->next, b->next);	
+		if (a->next == a) swap(a->next, b->prev);
+		else swap(a->prev, b->next);
+		a->upd();
+		b->upd();
+	}
+	friend void add(Anode* a, Anode* b) {
+		Anode* rem = a->next;
+		a->next = b;
+		b->prev->next = rem;
+		rem->prev = b->prev;
+		b->prev = a;
+	}
+	friend void isolate(Anode* a) {
+		a->prev->next = a->next;
+		a->next->prev = a->prev;
+		a->next = a->prev = a;
+	}
+	friend void reverse(Anode* a) {
+		if (a->next->next == a) return;
+		Anode* rem1 = a->prev;
+		Anode* rem2 = a->next->next;
+		rem1->next = rem2;
+		rem2->prev = rem1;
+		a->prev = a->next;
+		a->prev->next = a;
+		reverse(rem1);
+		add(a, rem1);
+	}
 };
 
 struct Alist {
 	map<int, Anode*> sheaf;
-	map<int, int> ins, outs;
-	set<int> begins, ends;
-	int begin() {
-		return *begins.begin();
+	void del(int, int);
+	Anode* begin() {
+		return sheaf[0]->next;
 	}
-	int end() {
-		return *ends.begin();
+	Anode* end() {
+		return sheaf[0];
 	}
-	void delnode(int i) {
-		delete(sheaf[i]);
-		sheaf.erase(i);
+	Alist() {
+		sheaf[0] = new Anode(0);
+	}
+	void delnode(Anode* i) {
+		add(i->prev, i->next);
+		sheaf.erase(i->id);
+		delete(i);
 	}
 	void clear() {
 		while (sheaf.size())
-			delnode(sheaf.begin()->first);
-	}
-	void upd(int i) {
-		begins.erase(i);
-		ends.erase(i);
-		if (ins[i] == 0) begins.insert(i);
-		if (outs[i] == 0) ends.insert(i);
-	}
-	void add(int a, int b) {
-		if (a && b) {
-			++outs[a]; ++ins[b]; upd(a); upd(b);
-		}
-	}
-	void del(int a, int b) {
-		if (a && b) {
-			--outs[a]; --ins[b]; upd(a); upd(b);
-		}
+			delnode(sheaf.begin()->second);
 	}
 	int size() {
-		return sheaf.size();
+		return sheaf.size() - 1;
 	}
-	void insert(int a, int b, int val) {
-		add(a, b);
-		if (sheaf.find(a) != sheaf.end()) delete(sheaf[a]);
-		sheaf[a] = new Anode(val, b);
+	Anode* anynew(int val) {
+		int id = size() + 1;
+		return sheaf[id] = new Anode(id, val);
 	}
-	void killbegin() {
-		int me = begin();
-		del(me, sheaf[me]->next);
-		begins.erase(me); ends.erase(me);
-		delnode(me);
+	void insprev(int a, int b, int val) {
+		if (sheaf.find(a) == sheaf.end()) {
+			sheaf[a] = new Anode(a, val);
+		} else
+			sheaf[a]->val = val;
+		if (sheaf.find(b) == sheaf.end()) {
+			sheaf[b] = new Anode(b);
+		}
+		add(sheaf[a], sheaf[b]);
 	}
-	void chnext(int a, int b) {
-		del(a, sheaf[a]->next);
-		sheaf[a]->next = b;
-		add(a, sheaf[a]->next);
+	void insnext(int a, int b, int val) {
+		insprev(a, b, val);
+		Aswap(sheaf[a], sheaf[b]);
+	}
+	int count(int val) {
+		Anode* cur = begin();
+		int res = 0;
+		while (cur) {
+			if (cur->val == val) {
+				++res;
+				cur->check = 1;
+			}
+			cur = cur->next;
+		}
+		return res;
+	}
+	Anode* scan(vector<int> v) {
+		int minf = size() + 1;
+		for (int i = 0; i < v.size(); ++i)
+			insprev(i + minf, (i + 1 < v.size() ? i + minf + 1 : minf), v[i]);
+		if (v.size()) {
+			v.clear();
+			return sheaf[minf];
+		}
+		return end();
+	}
+	void print() {
+		for (Anode* cur = begin(); cur != end(); cur = cur->next)
+			printf("%d ", cur->val);
 	}
 public:
  	Anode* operator[] (const int& i) {
@@ -72,25 +126,35 @@ public:
 	}
 };
 
+vector<int> getv(int n) {
+	int a;
+	vector<int> v;
+	for (int i = 0; i < n; ++i) {
+		cin >> a;
+		v.push_back(a);
+	}
+	return v;
+}
 
 
 int main() {
-    int a, b, c;
-	Alist L;
-	cout << "Input nodes of the list by 3 numbers: number of the node, number of the next (0, if no such) node and the value\nEnd your input with -1\n";
-	while (1) {
-		cin >> a;
-		if (a == -1) break;
-		cin >> b >> c;
-		L.insert(a, b, c);
+    int n, F, E;
+
+	Alist L1;
+	cout << "Input the number of entries\n";
+	cin >> n;
+	cout << "Input nodes of the list one-by-one.\n";
+	add(L1.end(), L1.scan(getv(n)));
+	pair<pair<int, int>, int> minf = make_pair(make_pair(L1.begin()->val, 1), L1.begin()->id);
+	int numb = 1;
+	for (Anode* i = L1.begin(); i != L1.end(); ) {
+		Anode* nextf = i->next;
+		minf = min(make_pair(make_pair(i->val, numb), i->id), minf);
+		i = nextf;
+		++numb;
 	}
-	int cur = L.begin();
-	pair<pair<int, int>, int> minf = make_pair(make_pair(L[L.begin()]->val, 1), L.begin());
-	for (int i = 1; ; ++i) {
-		minf = min(minf, make_pair(make_pair(L[cur]->val, i), cur));
-		if (cur == L.end()) break;
-		cur = L[cur]->next;
-	}
-	printf("Node %d is %d-th from the beginning (node %d) and has the least value (%d)\n", minf.second, minf.first.second, L.begin(), minf.first.first);
-	L.clear();
+	cout << minf.first.first << " is the value of the node " << minf.first.second << endl;
+	
+	
+	L1.clear();
 }
