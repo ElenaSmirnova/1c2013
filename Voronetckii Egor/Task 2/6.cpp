@@ -40,16 +40,16 @@ void Delete(list *l)
 }
 
 int main()
-{         
-	cnt = new int[(int)1e6];
-	cnt += (int)5e5;
-	printf("Inoput elements from -5e5 to 5e5 - 1 without -1, last element is -1\n");
+{        
+        cnt = new int[(int)1e6];
+        cnt += (int)5e5;
+        printf("Inoput elements from -5e5 to 5e5 - 1 without -1, last element is -1\n");
         list *l = 0;
         input(l);
        
         Count(l);
         for (int i = -5e5; i < 5e5; i++)
-                if (cnt[i]) printf("%d %d\n", i, cnt[i]);
+                if (cnt[i]) printf("%d was %d times\n", i, cnt[i]);
 
         Delete(l);
         delete[] (cnt - (int)5e5);
