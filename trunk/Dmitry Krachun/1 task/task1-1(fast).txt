@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+   int fibonacci[1000];
+   int n;
+   cin >> n;
+
+   fibonacci[0] = 0;
+   fibonacci[1] = 1;
+   for (int i = 2; i <= n; i++){
+      fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
+   }
+   if (n > 0) {
+           cout << fibonacci[n] << endl;} else {
+               cout << "incorrect input" << endl;}
+
+   cout << "Hello world!" << endl;
+   return 0;
+}
