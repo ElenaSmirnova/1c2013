@@ -70,23 +70,23 @@ struct MyString {
 
 const long long POW = 257; 
 const long long MOD = 1000033;
-vector<string> hash_table[MOD];
+vector<MyString> hash_table[MOD];
 vector<int> times[MOD];
 
-long long count_hash(string s) {
+long long count_hash(MyString s) {
 	long long ans = 0, p = 1;
-	for (int i = 0; i < s.size(); i++) {
-		ans = (ans + p * s[i]) % MOD;
+	for (int i = 0; i < s.length(); i++) {
+		ans = (ans + p * s.s[i]) % MOD;
 		p = (p * POW) % MOD;
 	}
 	return ans;
 }
 
-void add(string s) {
+void add(MyString s) {
 	int hash_s = count_hash(s);
 		
 	int idstr;
-	for (idstr = 0; idstr < hash_table[hash_s].size() && hash_table[hash_s][idstr] != s; idstr++) {}
+	for (idstr = 0; idstr < hash_table[hash_s].size() && !(hash_table[hash_s][idstr] == s); idstr++) {}
 	if (idstr < hash_table[hash_s].size())
 		times[hash_s][idstr]++;
 	else {
@@ -131,7 +131,7 @@ int main() {
 	printf("Maximal chain length: %d\n", maxlength);
 	cout << "Words in it:\n";
 	for (int i = 0; i < hash_table[maxlengthid].size(); i++)
-		cout << hash_table[maxlengthid][i] << '\n';
+		cout << hash_table[maxlengthid][i].s << '\n';
 	cout << '\n';
 
 	int stringnumber = 0;
@@ -139,7 +139,7 @@ int main() {
 	for (int i = 0; i < MOD; i++) {
 		for (int j = 0; j < hash_table[i].size(); j++) {
 			stringnumber += times[i][j];
-			cout << hash_table[i][j];
+			cout << hash_table[i][j].s;
 			printf(": %d times\n", times[i][j]);
 		}
 	}
