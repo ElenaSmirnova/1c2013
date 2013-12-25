@@ -15,6 +15,18 @@ void write(tree *t)
 	printf("%d(%d) ", t->data, t->cnt);
 }
 
+
+void Delete(tree *t)
+{
+        if (t)
+        {
+                Delete(t->left);
+                Delete(t->right);
+                delete t;
+        }
+}
+
+
 void go(tree *t, void f(tree *))
 {
 	if (t)
@@ -44,6 +56,8 @@ void deleteElement(tree *&t, int x)
 	if (t == 0) return;
 	else if (t->data == x)
 		if (t->cnt == 1)
+    {
+      tree *nt = t;
 			if (t->right == 0) t = t->left;
 			else
 			{
@@ -52,6 +66,8 @@ void deleteElement(tree *&t, int x)
 				t2->left = t->left;
 				t = t->right;
 			}
+         delete nt;
+    }
 		else t->cnt--;
 	else if (t->data < x) deleteElement(t->right, x);
 	else deleteElement(t->left, x);
@@ -68,6 +84,8 @@ int main()
 
 	deleteElement(t, 0);
 	go(t, write);
+        Delete(t);
+
 
 	return 0;
 }
