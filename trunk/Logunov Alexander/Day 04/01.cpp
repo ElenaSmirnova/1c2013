@@ -50,7 +50,7 @@ struct MyString {
 	void clone(MyString a) {
 		s = a.s;
 	}
-	int length(MyString b) {
+	int length() {
 		return s.size();
 	}
 	MyString substr(int index, int len) {
@@ -71,6 +71,29 @@ int main() {
 	
 	//freopen("a.in", "r", stdin);
 	//freopen("a.out", "w", stdout);
+
+	MyString a, b("123"), c("123456");
+	a = b + c;
+	a.print();
+	b.clone(a);
+	a = "124";
+	cout << "Length of " << b.s << " equals to " << b.length() << '\n';
+	cout << a.s << " < " << b.s << "? " << (a < b) << '\n';
+	cout << a.s << " = " << b.s << "? " << (a == b) << '\n';
+	cout << a.s << " > " << b.s << "? " << (a > b) << '\n';
+
+	b = c.substr(1, 3);
+	c = "";	
+	cout << "Is B empty? " << b.empty() << '\n';
+	cout << "Is C empty? " << c.empty() << '\n';
+
+	char *d = a.toarray();
+	int sized = a.length();
+	for (int i = 0; i < sized; i++)
+		cout << d[i];
+	cout << '\n';
+
+	getchar();
 
 	return 0;
 }
