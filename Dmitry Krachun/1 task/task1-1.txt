@@ -1,0 +1,23 @@
+#include <cstdio>
+#include <iostream>
+#include <cmath>
+
+
+using namespace std;
+
+int fibonacci(int t)
+{
+ if (t * t == t){
+       return t;
+   } else {
+       return fibonacci(t - 1) + fibonacci(t - 2);
+       }
+}
+int main()
+{
+   int n;
+   cin >> n;
+   cout << fibonacci(n) << endl;
+   cout << "Hello world!" << endl;
+   return 0;
+}
