@@ -84,8 +84,8 @@ void find_paths(tree *t, int sum, string path) {
 		return;
 	}
 
-	find_paths(t->left, sum + t->left->value, path + 'L');
-	find_paths(t->right, sum + t->right->value, path + 'R');
+	find_paths(t->left, sum + t->left->value, path + 'A');
+	find_paths(t->right, sum + t->right->value, path + 'B');
 }
 
 int main() {
@@ -111,8 +111,8 @@ int main() {
 
 	//print(root);
 
-	cout << "All paths have written as strings conststing of symbols 'L' and 'R': methods of going down from root.\n";
-	find_paths(root, root->value, "");
+	cout << "All paths have written as strings conststing of symbols 'A' and 'B': methods of going down from root.\n";
+	find_paths(root, root->value, "C");
 
 	clear(root);
 
