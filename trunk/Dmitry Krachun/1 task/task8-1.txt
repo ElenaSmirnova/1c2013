@@ -1,0 +1,18 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+   string S;
+   cin >> S;
+   bool ans = 1;
+   int n = S.length();
+   for(int i = 0; i < n ; i++){
+       ans &= (S[i] == S[n - i - 1]);
+   }
+
+   if(ans){cout << "This word is a palindrome";}
+   else {cout << "This word isn't a palindrome";};
+   return 0;
+}
