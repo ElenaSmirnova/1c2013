@@ -73,6 +73,7 @@ struct Htable {
 		return (begin != 0);
 	}
 	void ins(Astr s) {
+		if (check(s)) return;
 		Hnode* tmp;
 		int mhash = s.hash();
 		tmp = head[mhash];
@@ -98,5 +99,5 @@ int main() {
 		cin >> s;
 		H.ins(Astr(s));
 	}
-	cout << "Load factor: " << H.LF() << "\nEmpty entries: " << H.empty() << "\nNumber of entries: " << H.sum << endl;
+	cout << "Load factor: " << H.LF() << "\nEmpty entries: " << H.empty() << "\nNumber of entries: " << H.sum << endl << "Number of chains: " << mod - H.empty() << endl;
 }
