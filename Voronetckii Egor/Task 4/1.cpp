@@ -227,7 +227,6 @@ int main()
 	str1 += str1;
 	printf("%s\n", str1.ToCharPointer());
 	printf("%s\n", str2.ToCharPointer());
-	printf("%d %d %d\n", str1 == str2, str1.Length(), str2.Empty());
 	str1 = str1.Substring(2, 4);
 	printf("%s\n", str1.ToCharPointer());
 	return 0;
