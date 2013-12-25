@@ -4,7 +4,7 @@
 #include <ctime>
 using namespace std;
 
-char Stack[1000000];
+char Stack[1000000]; // This is stack
 int n = 0;
 
 char str[1000000];
