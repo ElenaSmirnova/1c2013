@@ -1,0 +1,96 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+
+struct tree//binary tree
+{
+    tree *left, *right;
+    tree *root;
+    int num, cnt;//root contain cnt equal numbers num;
+};
+void go(tree *t)
+{
+    if(t){
+        go(t->left);
+        cout << t->num  << ":" << t->cnt << endl;
+        go(t->right);
+    }
+}
+void insert(tree *root, tree *&t, int x)//insert element x in tree t;
+{
+    if(t == 0){
+        t = new tree();
+        t->left = 0;
+        t->right = 0;
+        t->num = x;
+        t->cnt = 1;
+        if(root) t->root = root; else t->root = t;
+    } else {
+        if(t->num == x) t->cnt++;
+        if(t->num > x) insert(root, t->left, x);
+        if(t->num < x) insert(root, t->right, x);
+    }
+}
+int root(tree *t)
+{
+    if(t != NULL) return t->root->num; else return -1;
+}
+int main()
+{
+  tree *t = 0;
+  insert(t, t, 1);
+  insert(t, t, 2);
+  insert(t, t, 3);
+  insert(t, t, 5);
+  insert(t, t, 3);
+  insert(t, t, 1);
+  cout << root(t);#include <cstdio>
+#include <iostream>
+using namespace std;
+
+struct tree//binary tree
+{
+    tree *left, *right;
+    tree *root;
+    int num, cnt;//root contain cnt equal numbers num;
+};
+void go(tree *t)
+{
+    if(t){
+        go(t->left);
+        cout << t->num  << ":" << t->cnt << endl;
+        go(t->right);
+    }
+}
+void insert(tree *root, tree *&t, int x)//insert element x in tree t;
+{
+    if(t == 0){
+        t = new tree();
+        t->left = 0;
+        t->right = 0;
+        t->num = x;
+        t->cnt = 1;
+        if(root) t->root = root; else t->root = t;
+    } else {
+        if(t->num == x) t->cnt++;
+        if(t->num > x) insert(root, t->left, x);
+        if(t->num < x) insert(root, t->right, x);
+    }
+}
+int root(tree *t)
+{
+    if(t != NULL) return t->root->num; else return -1;
+}
+int main()
+{
+  tree *t = 0;
+  insert(t, t, 1);
+  insert(t, t, 2);
+  insert(t, t, 3);
+  insert(t, t, 5);
+  insert(t, t, 3);
+  insert(t, t, 1);
+  cout << root(t);
+}
+
+}
