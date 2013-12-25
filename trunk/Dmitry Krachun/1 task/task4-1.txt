@@ -1,0 +1,34 @@
+#include <iostream>
+#include <string>
+using namespace std;
+void error()
+{
+   cout << "incorrect input" << endl;
+}
+int main()
+{
+   string S;
+   cin >> S;
+   int n;
+   n = S.length();
+   int c = 0;
+   for(int i = 0; i < n; i++){
+       if((S[i] != '(') && (S[i] != ')')){
+           error();
+           return 0;
+       }
+       if(S[i] == '('){c++;};
+       if(S[i] == ')'){c--;};
+       if(c < 0){
+           cout << "input string isn't regular bracket sequence";
+           return 0;
+       }
+   }
+   if(c == 0){
+       cout << "input string is regular bracket sequence!";
+   }
+   if(c > 0){
+       cout << "input string isn't regular bracket sequence";
+   }
+   return 0;
+}
