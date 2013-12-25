@@ -70,8 +70,11 @@ struct MyString {
 
 const long long POW = 257; 
 const long long MOD = 1000033;
-vector<MyString> hash_table[MOD];
-vector<int> times[MOD];
+
+//bicycle-type realization of list
+MyString list[MOD];
+int nxt[MOD], last[MOD], inlist[MOD], lastfree;
+int hash_table_sz[MOD], times[MOD];
 
 long long count_hash(MyString s) {
 	long long ans = 0, p = 1;
@@ -86,12 +89,16 @@ void add(MyString s) {
 	int hash_s = count_hash(s);
 		
 	int idstr;
-	for (idstr = 0; idstr < hash_table[hash_s].size() && !(hash_table[hash_s][idstr] == s); idstr++) {}
-	if (idstr < hash_table[hash_s].size())
-		times[hash_s][idstr]++;
+	for (idstr = last[hash_s]; idstr != -1 && !(list[idstr] == s); idstr = nxt[idstr]) {}
+	if (idstr != -1)
+		times[idstr]++;
 	else {
-		hash_table[hash_s].push_back(s);
-		times[hash_s].push_back(1);
+		hash_table_sz[hash_s]++;
+		nxt[lastfree] = last[hash_s];
+		last[hash_s] = lastfree;
+		list[lastfree] = s;
+		times[lastfree] = 1;
+		lastfree++;
 	}
 }
 
@@ -101,6 +108,11 @@ int main() {
 	//freopen("a.out", "w", stdout);
 
 	cout << "Print the text string-by-string. Finish writing by '!' symbol.\n";
+	
+	memset(last, -1, sizeof(last));
+	memset(nxt, -1, sizeof(nxt));
+	lastfree = 0;
+
 	string s;
 	cin >> s;
 	while (s != "!") {
@@ -110,17 +122,17 @@ int main() {
 	
 	double factor = 0;
 	for (int i = 0; i < MOD; i++)
-		factor += hash_table[i].size();
+		factor += hash_table_sz[i];
 	factor /= MOD;
 	printf("Load factor: %.6lf\n", factor);
 
 	double average = 0;
 	int maxlength = -1, maxlengthid = -1, cells = 0;
 	for (int i = 0; i < MOD; i++) {
-		cells += !hash_table[i].empty();
-		average += hash_table[i].size();
-		if (maxlength < (int)hash_table[i].size()) {
-			maxlength = hash_table[i].size();
+		cells += hash_table_sz[i] != 0;
+		average += hash_table_sz[i];
+		if (maxlength < hash_table_sz[i]) {
+			maxlength = hash_table_sz[i];
 			maxlengthid = i;
 		}
 	}
@@ -130,17 +142,17 @@ int main() {
 
 	printf("Maximal chain length: %d\n", maxlength);
 	cout << "Words in it:\n";
-	for (int i = 0; i < hash_table[maxlengthid].size(); i++)
-		cout << hash_table[maxlengthid][i].s << '\n';
+	for (int i = last[maxlengthid]; i != -1; i = nxt[i])
+		cout << list[i].s << '\n';
 	cout << '\n';
 
 	int stringnumber = 0;
 	cout << "All strings:\n";
 	for (int i = 0; i < MOD; i++) {
-		for (int j = 0; j < hash_table[i].size(); j++) {
-			stringnumber += times[i][j];
-			cout << hash_table[i][j].s;
-			printf(": %d times\n", times[i][j]);
+		for (int j = last[i]; j != -1; j = nxt[j]) {
+			stringnumber += times[j];
+			cout << list[j].s;
+			printf(": %d times\n", times[j]);
 		}
 	}
 	printf("(totally: %d)\n", stringnumber);
