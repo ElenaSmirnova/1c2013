@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+int power(int a, int n)
+{
+   int x = 1;
+   for(int i = 0; i < n; i++){
+       x *= a;
+   }
+   return x;
+}
+int main()
+{
+   int a, n;
+
+   cin >> a >> n;
+   if(n >= 0){cout << power(a, n);} else {
+       cout << "incorrect input";
+   }
+   return 0;
+}
