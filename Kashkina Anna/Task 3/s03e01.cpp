@@ -5,7 +5,6 @@ using namespace std;
 
 //Binary tree : in-order (symmetric) traversal
 
-const int maxn = 200000;
 
 struct Btree;
 struct Dtree;
