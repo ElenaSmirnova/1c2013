@@ -25,8 +25,8 @@ struct Alist {
 		return *ends.begin();
 	}
 	void delnode(int i) {
-		delete(sheaf[i]);
 		sheaf.erase(i);
+		delete(sheaf[i]);
 	}
 	void clear() {
 		while (sheaf.size())

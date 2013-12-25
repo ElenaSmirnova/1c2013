@@ -61,8 +61,8 @@ struct Alist {
 	}
 	void delnode(Anode* i) {
 		add(i->prev, i->next);
-		delete(i);
 		sheaf.erase(i->id);
+		delete(i);
 	}
 	void clear() {
 		while (sheaf.size())
