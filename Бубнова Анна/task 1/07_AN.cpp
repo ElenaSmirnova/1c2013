@@ -7,7 +7,11 @@ int main(){
   double a,res;
   int n;
   sscanf(s,"%lf %d",&a,&n);
-  double res_expln=(a==0)?0:((a<0)?(-1):1)*exp(log(fabs(a))*n);
+  double res_expln=(a==0)?0:(((a<0)&&(n%2==0))?(-1):1)*exp(log(fabs(a))*n);
+  if (n<0){
+    a=1/a;
+    n=-n;
+  };
   for (res=1.0;n;(a*=a),(n>>=1))
     if (n&1)
       res*=a;
