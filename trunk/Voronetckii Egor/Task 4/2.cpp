@@ -163,7 +163,7 @@ public:
         }
         char *ToCharPointer()                  
         {
-                char *str = new char[symbols ? symbols->size : 0 + 1];
+                char *str = new char[(symbols ? symbols->size : 0) + 1];
                 str[symbols ? symbols->size : 0] = '\0';
                 if (symbols) symbols->Write(str);
                 return str;
@@ -323,3 +323,4 @@ int main()
 
         return 0;
 }
+
