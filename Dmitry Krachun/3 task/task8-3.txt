@@ -1,0 +1,83 @@
+#include <cstdio>
+#include <iostream>
+using namespace std;
+
+struct tree
+{
+	tree *left, *right;
+	int num, cnt; // root contain cnt equal numbers num;
+};
+
+
+
+void Delete(tree *t)
+{
+    if (t)
+    {
+        Delete(t->left);
+        Delete(t->right);
+        delete t;
+    }
+}
+
+
+void go(tree *t)
+{
+	if (t)
+	{
+		go(t->left);
+		cout << t->num << " ";
+		go(t->right);
+	}
+}
+
+void insert(tree *&t, int x)
+{
+	if (t == 0)
+	{
+		t = new tree();
+		t->left = t->right = 0;
+		t->num = x;
+		t->cnt = 1;
+	}
+	else if (t->num == x) t->cnt++;
+	else if (t->num < x) insert(t->right, x);
+	else insert(t->left, x);
+}
+
+void deleteElement(tree *&t, int x)
+{
+	if (t == 0) return;
+	else if (t->num == x)
+		if (t->cnt == 1)
+    {
+      tree *nt = t;
+			if (t->right == 0) t = t->left;
+			else
+			{
+				tree *t2;
+				for (t2 = t->right; t2->left; t2 = t2->left);
+				t2->left = t->left;
+				t = t->right;
+			}
+         delete nt;
+    }
+		else t->cnt--;
+	else if (t->num < x) deleteElement(t->right, x);
+	else deleteElement(t->left, x);
+}
+
+int main()
+{
+	tree *t = 0;
+	insert(t, 0);
+	insert(t, 1);
+	insert(t, 0);
+	insert(t, 1);
+	insert(t, 2);
+
+	deleteElement(t, 0);
+	go(t);
+    Delete(t);
+	return 0;
+}
