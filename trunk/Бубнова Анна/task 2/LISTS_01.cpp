@@ -26,6 +26,34 @@ int main(){
       printf("Элемента с номером %d нет.\n",n);
   for (temp=l,i=0;(temp);i++,temp=temp->n);
   printf("Список состоит из %d элементов\n",i);
+  List *min=l;
+  int imin=0;
+  for (temp=l,i=0;(temp);i++,temp=temp->n)
+    if (temp->e<min->e){
+      min=temp;
+      imin=i;
+    };
+  printf("Минимальный элемент %d имеет позицию %d\n",min->e,imin);
+  List *pretemp;
+  for (temp=l,pretemp=NULL;(temp);(pretemp=temp),(temp=temp->n))
+    if (temp->e>0){
+      if (!pretemp){
+        while (temp->e>0){
+          l=temp->n;
+          free(temp);
+          temp=l;
+        };
+      } else{//удаляем не первый элемент
+          pretemp->n=temp->n;
+          free(temp);
+          temp=pretemp;
+        };
+    };
+  printf("Список без положительных элементов:\n");
+  for (temp=l;(temp)&&(temp->n);temp=temp->n)
+    printf("%d ",temp->e);
+  if (temp)
+    printf("%d\n",temp->e);
   //вывод списка
 /*
   for (temp=l;(temp)&&(temp->n);temp=temp->n)
