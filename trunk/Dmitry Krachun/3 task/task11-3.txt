@@ -1,0 +1,22 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+char stack[1000];
+char stack1[1000];
+char str[1000];
+int main()
+{
+    scanf("%s", str);
+    int size = 0;
+    int i;
+    for(i = 0; str[i]; i++) size++;
+    for(i = 0; 2 * i < size; i++) stack[i] = str[i];
+    int n = i;
+    i = 0;
+    while(n) stack1[i++] = stack[--n];
+    for(int i = size / 2; i < size; i++) stack[i - size / 2] = str[i];
+    n += i;
+    while(n) stack1[(i++)] = stack[--n];
+    printf("%s\n", stack1);
+    return 0;
+}
