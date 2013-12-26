@@ -43,7 +43,8 @@ int main()
 {        
         cnt = new int[(int)1e6];
         cnt += (int)5e5;
-        printf("Inoput elements from -5e5 to 5e5 - 1 without -1, last element is -1\n");
+        for (int i = -5e5; i < 5e5; i++) cnt[i] = 0;
+        printf("Input elements from -5e5 to 5e5 - 1 without -1, last element is -1\n");
         list *l = 0;
         input(l);
        
