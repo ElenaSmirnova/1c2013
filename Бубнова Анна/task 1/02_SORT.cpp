@@ -8,13 +8,15 @@ int main(){
   printf("И сами элементы\n");
   int i;
   for (i=0;i<n;i+=scanf("%d",&(a[i])));
-#define xchg(x,y) {int _=a[x];a[x]=a[y];a[y]=_;}
-  for (i=0;i<n;i++){
-    int imin=i,j;
-    for (j=i+1;j<n;j++)
-      if (a[j]<a[imin])
-        imin=j;
-    xchg(imin,i);
+#define xchg(x,y) {int _=a[(x)];a[(x)]=a[(y)];a[(y)]=_;}
+  int flag=1;
+  for (i=n-1;(i>0)&&(flag);i--){
+    flag=0;
+    for (int j=0;j<=i-1;j++)
+      if (a[j]>a[j+1]){
+        xchg(j,j+1);
+        flag=1;
+      };
   };
   for (i=0;i<n-1;i++)
     printf("%d ",a[i]);
