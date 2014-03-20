@@ -32,6 +32,7 @@ int main()
 	{
 		scanf("%d%d", &x, &y);
 		edg[x][y] = 1;
+		edg[y][x] = 1;
 	}
 	
 	for(int i = 0; i < V; i++)
