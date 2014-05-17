@@ -1,4 +1,3 @@
-
 #include "StdAfx.h"
 #include <iostream>
 #include <fstream>
@@ -15,32 +14,32 @@ std::string s;
 std::string ss;
 
 
-//автомат
+//Р°РІС‚РѕРјР°С‚
 void DKA(int i){
 switch (State)
 {
-case 1/*Внутри, ожидаю * */:
+case 1/*Р’РЅСѓС‚СЂРё, РѕР¶РёРґР°СЋ * */:
 	{
 		if (s[i]=='*') { cout<<'*'; State=2;} else {cout<<s[i];};
 	}break;
-case 2 /*Внутри, ожидаю / */:
+case 2 /*Р’РЅСѓС‚СЂРё, РѕР¶РёРґР°СЋ / */:
 	{
 		switch(s[i])
 		{
-		case '/': {cout<<"/ ";State=3;} break; /*выход*/
+		case '/': {cout<<"/ ";State=3;} break; /*РІС‹С…РѕРґ*/
 		case '*': {cout<<'*';} break;
 		default: {cout<<s[i];State=1;};break;
 		}
 	}break;
-	case 3/*Вне, ожидаю / */:
+	case 3/*Р’РЅРµ, РѕР¶РёРґР°СЋ / */:
 	{
 		if (s[i]=='/') { State=4;} 
 	}break;
-	case 4 /*Вне, ожидаю * */:
+	case 4 /*Р’РЅРµ, РѕР¶РёРґР°СЋ * */:
 	{
 		switch(s[i])
 		{
-		case '*': {State=1;cout<<"/*";} break; /*вход внутрь*/
+		case '*': {State=1;cout<<"/*";} break; /*РІС…РѕРґ РІРЅСѓС‚СЂСЊ*/
 		case '/': {State=3;} break;
 		default: {State=3;} ;break;
 		}
@@ -52,7 +51,7 @@ case 2 /*Внутри, ожидаю / */:
 
 int main()
 {
-	//считываем из файла в строку  s
+	//СЃС‡РёС‚С‹РІР°РµРј РёР· С„Р°Р№Р»Р° РІ СЃС‚СЂРѕРєСѓ  s
 ifstream test("test.txt");           
 
 ifstream fin("test.txt");
@@ -69,7 +68,7 @@ test.close();
 
 
  setlocale(LC_CTYPE, "");
- //программа
+ //РїСЂРѕРіСЂР°РјРјР°
  State=3;
  i=0;
  len=s.length();
