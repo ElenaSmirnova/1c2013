@@ -21,44 +21,58 @@ const int inf = 1e9;
 
 #define file "txt"
 #define N 100500
-
-char s[N];    
-
-struct FSM
-{
-	FSM *goSlash, *goStar, *goElse;
-	FSM() {};
-	FSM(FSM *sl, FSM *st, FSM *e): goSlash(sl), goStar(st), goElse(e) {};
-};
-       
+           
 int main()
 {
-	freopen("code.cpp", "r", stdin);
-	printf("Input file is \"code.cpp\".\n");
-	int n = 0;
-	while (scanf("%c", &s[n]) >= 1) n++;
+    freopen("code.cpp", "r", stdin);
+    printf("Input file is \"code.cpp\".\n");
 
-	FSM *start = new FSM();
-	FSM *open = new FSM();
-	FSM *comment = new FSM();
-	FSM *close = new FSM();
-	*start = FSM(open, start, start);
-	*open = FSM(open, comment, start);
-	*comment = FSM(comment, close, comment);
-	*close = FSM(start, close, comment);
-
-	FSM *cur = start, *prev = start;
-	for (int i = 0; i < n; i++)
-	{
-		prev = cur;
-		if (s[i] == '/') cur = cur->goSlash;
-		else if (s[i] == '*') cur = cur->goStar;
-		else cur = cur->goElse;
-		if (cur == comment && prev == open) printf("/*");
-		else if (cur == comment) printf("%c", s[i]);
-		else if (cur == close) printf("%c", '*');
-		else if (cur == start && prev == close) printf("/\n");
-	}
-
+    int state = 0;
+    /*
+    0 -- code
+    1 -- begin
+    2 -- comment
+    3 -- end
+    */
+    char c;
+    while (scanf("%c", &c) >= 1)
+    	switch (state)
+       	{
+       		case 0:
+       		switch (c)
+       		{
+       			case '*': break;
+        		case '/': state = 1; break;
+        		default: break;
+       		}
+       		break;
+       		
+       		case 1:
+       		switch (c)
+       		{
+       			case '*': state = 2; printf("/*"); break;
+        		case '/': break;
+        		default: state = 0; break;
+       		}  
+       		break;
+        	
+        	case 2:
+     		switch (c)
+       		{
+       			case '*': state = 3; break;
+        		case '/': printf("/"); break;
+       			default: printf("%c", c); break;
+       		}  
+       		break;
+            
+            case 3:
+       		switch (c)
+       		{
+       			case '*': printf("*"); break;
+        		case '/': printf("*/\n"); state = 0; break;
+        		default: state = 2; printf("%c", c); break;
+       		} 
+            break;                         
+    	}
 	return 0;
 }
