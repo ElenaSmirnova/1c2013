@@ -9,7 +9,7 @@ const int maxlen = 10000;
 char s[maxlen];
 
 int go[2][256];
-const int fail = -1, ok = 1;
+const int fail = -1, ok = -2;
 int state = 0;
 int lexemeBeginning = 0;
 
