@@ -30,6 +30,9 @@ void run() {
 	table[3]['*'] = 4;
 	table[4]['*'] = 4;
 	table[4]['/'] = 5;
+	for (int i = 0; i < 256; ++i) {
+		table[5][i] = table[0][i];
+	}
 
 	string mem = "";
 	while (true) {
@@ -37,8 +40,6 @@ void run() {
 			case 5:
 				cout << mem << "\n";
 				mem = "";
-				state = ok;
-				break;
 			default: 
 				c = nextChar();
 				if (c == EOF) {state = end; break;}
