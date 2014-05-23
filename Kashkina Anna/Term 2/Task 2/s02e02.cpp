@@ -27,6 +27,7 @@ void run() {
 		table[4][i] = 3;
 	}
 	table[3]['*'] = 4;
+	table[4]['*'] = 4;
 	table[4]['/'] = 5;
 
 	string mem = "";
@@ -43,6 +44,7 @@ void run() {
 				state = table[state][c];
 				if (state == 2) mem = "";
 				if (state >= 2) mem.push_back(c);
+				//if (state != ok) cout << state << "!";
 				break;
 		}
 		if (state == end) break;
