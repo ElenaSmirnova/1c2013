@@ -14,78 +14,73 @@ using namespace std;
 
 enum {init, slash, comment, star};
 
+const int jump[4][3] = {{0, 1, 0},
+                        {0, 0, 2},
+					              {2, 2, 3},
+                        {2, 0, 3}};
+
 int main() {
 
-	//freopen("a.in", "r", stdin);
-	//freopen("a.out", "w", stdout);
-	
-	cout << "Write some code on C++.\n";
-	cout << "Finish the process by \"END\" without quotes.\n";
+        //freopen("a.in", "r", stdin);
+        //freopen("a.out", "w", stdout);
+        
+        int id[256];
+        for (int i = 0; i < 256; i++)
+           id[i] = 0;
+        id['/'] = 1;
+        id['*'] = 2;
 
-	string s, code = "";
-	int state = init;
+        cout << "Write some code on C++.\n";
+        cout << "Finish the process by \"END\" without quotes.\n";
 
-	while (true) {
-		getline(cin, s);
-		if (s == "END")
-			break;
+        string s, code = "";
+        int state = init;
 
-		s += '\n';
+        while (true) {
+                getline(cin, s);
+                if (s == "END")
+                        break;
 
-		for (int i = 0; i < (int)s.size(); i++) {
-			char c = s[i];
-			switch(state) {
-				case init: {
-					switch(c) {
-						case '/': state = slash; break;
-						default: state = init;
-					}
-					break;
-				}
-				case slash: {
-					switch(c) {
-						case '*': {
-							state = comment;
-							code += "/*";
-							break;
-						}
-						default: state = init;
-					}
-					break;
-				}
-				case comment: {
-					switch(c) {
-						case '*': {
-							state = star;
-							code += c;
-							break;
-						}
-						default: code += c;
-					}
-					break;
-				}
-				case star: {
-					switch(c) {
-						case '/': {
-							state = init;
-							code += c;
-							code += '\n';
-							break;
-						}
-						default: {
-							state = comment;
-							code += c;
-						}
-					}
-					break;
-				}
-			}
-		}
-	}
+                s += '\n';
 
-	cout << code;
+                for (int i = 0; i < (int)s.size(); i++) {
+                        char c = s[i];
+                        switch(state) {
+                                case init: {
+                                        break;
+                                }
+                                case slash: {
+                                        switch(c) {
+                                                case '*': {
+                                                        code += "/*";
+                                                        break;
+                                                }
+                                        }
+                                        break;
+                                }
+                                case comment: {
+                                        code += c;
+                                        break;
+                                }
+                                case star: {
+                                code += c;
+                                        switch(c) {
+                                                case '/': {
+                                                        code += '\n';
+                                                        break;
+                                                }
+                                        }
+                                        break;
+                                }
+                        }
 
-	getchar();
+                    state = jump[state][id[c]];
+                }
+        }
 
-	return 0;
+        cout << code;
+
+        getchar();
+
+        return 0;
 }
