@@ -21,6 +21,7 @@ void run() {
 	int state = ok;
 	char c;
 	table[ok]['/'] = 2;
+	table[2]['/'] = 2;
 	table[2]['*'] = 3;
 	for (int i = 0; i < 256; ++i) {
 		table[3][i] = 3;
